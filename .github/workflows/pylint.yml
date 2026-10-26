@@ -29,4 +29,4 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
-          pylint src --disable=all --enable=E,F
+          pylint src --disable=all --enable=E,F --extension-pkg-allow-list=pygame
