@@ -17,12 +17,28 @@ class Board:
         self.squares[initial.row][initial.col].piece = None
         self.squares[final.row][final.col].piece = piece
 
+        if isinstance(piece, Pawn):
+            self.check_promotion(piece, final)
+
+        if isinstance(piece, King):
+            if self.castling(initial, final):
+                diff = final.col - initial.col
+                rook = piece.left_rook if (diff < 0) else piece.right_rook
+                self.move(rook,rook.moves[-1])
+
         piece.moved = True
         piece.clear_moves()
         self.last_move = move
 
     def valid_move(self,piece, move):
         return move in piece.moves
+
+    def castling(self,initial,final):
+        return abs(initial.col - final.col) == 2 
+
+    def check_promotion(self,piece,final):
+        if final.row == 0 or final.row == 7:
+            self.squares[final.row][final.col].piece = Queen(piece.color)
 
     def calc_moves(self, piece, row, col):
         """
@@ -116,6 +132,21 @@ class Board:
                         final = Square(possible_move_row, possible_move_col)
                         move = Move(initial, final)
                         piece.add_move(move)
+
+            if not piece.moved:
+                left_rook = self.squares[row][0].piece
+                if isinstance(left_rook, Rook) and not left_rook.moved:
+                    if all(self.squares[row][c].isEmpty() for c in range(1, 4)):
+                        piece.left_rook = left_rook
+                        left_rook.add_move(Move(Square(row, 0), Square(row, 3)))
+                        piece.add_move(Move(Square(row, col), Square(row, 2)))
+
+                right_rook = self.squares[row][7].piece
+                if isinstance(right_rook, Rook) and not right_rook.moved:
+                    if all(self.squares[row][c].isEmpty() for c in range(5, 7)):
+                        piece.right_rook = right_rook
+                        right_rook.add_move(Move(Square(row, 7), Square(row, 5)))
+                        piece.add_move(Move(Square(row, col), Square(row, 6)))
 
         if isinstance(piece, Pawn): 
             pawn_moves()
