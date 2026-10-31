@@ -1,4 +1,6 @@
 import os
+
+from resources import resource_path
 class Piece:
 
     def __init__(self, name, color, value, texture=None, texture_rect=None):
@@ -14,8 +16,10 @@ class Piece:
         self.texture_rect = texture_rect
 
     def set_texture(self, size=80):
-        self.texture = os.path.join(
-            f'assets/images/imgs-{size}px/{self.color}_{self.name}.png'
+        self.texture = resource_path(
+            os.path.join(
+                f'assets/images/imgs-{size}px/{self.color}_{self.name}.png'
+            )
         )
 
     def add_move(self, move):

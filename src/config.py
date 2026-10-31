@@ -1,8 +1,8 @@
 import pygame
-import os
 
 from sound import Sound
 from theme import Theme
+from resources import resource_path
 
 class Config:
     def __init__(self):
@@ -12,10 +12,10 @@ class Config:
         self.theme = self.themes[self.idx]
         self.font = pygame.font.SysFont('monospace', 18, bold=True)
         self.move_sound = Sound(
-            os.path.join('assets/sounds/move.wav')
+            resource_path('assets/sounds/move.wav')
         )
         self.capture_sound = Sound(
-            os.path.join('assets/sounds/capture.wav')
+            resource_path('assets/sounds/capture.wav')
         )
 
     def change_theme(self):
