@@ -71,6 +71,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
             release-assets/Chess-Windows.zip \
             release-assets/Chess-Linux.tar.gz \
             --title "Chess ${GITHUB_REF_NAME}" \
