@@ -1,45 +1,35 @@
 # Chess
-
 A Pygame chess client with local and online multiplayer modes.
-
 ## Requirements
 Python 3.10+ is required. Install dependencies with:
-
 ```bash
 python -m pip install -r requirements.txt
 ```
-
 ## Local game
 ```bash
 python src/main.py
 ```
-
 Controls: drag pieces to move; `T` changes the theme; `R` resets a local game;
 `Esc` quits.
-
 ## Online game
 The Python WebSocket server is authoritative. It assigns `white` or `black`,
 validates moves, keeps each room in memory, and broadcasts valid moves to both
 players. Each room supports two players.
-
 Start the server locally:
 
 ```bash
 PYTHONPATH=src python src/server.py --host 127.0.0.1 --port 8765
 ```
-
 Start two clients with the same room:
 
 ```bash
 python src/main.py --online ws://127.0.0.1:8765 --room local-game
 ```
-
 For a public TLS endpoint:
 
 ```bash
 python src/main.py --online wss://ajedrez.example.com --room game-42
 ```
-
 Players only need the client. Docker and Cloudflare are needed only on the
 machine hosting the server.
 
@@ -117,7 +107,18 @@ The expected response contains:
 
 ## Standalone clients
 The `Build Chess client` GitHub Actions workflow creates independent clients
-for Windows and Linux. It runs manually or when a `v*` tag is pushed.
+for Windows and Linux. It runs manually or when a `v*` tag is pushed. When a
+version tag is pushed, the workflow also creates a GitHub Release and attaches
+both archives to it.
+
+To publish a release:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Download the archives from the repository's **Releases** page.
 
 Build locally on the current operating system:
 
@@ -125,8 +126,6 @@ Build locally on the current operating system:
 python -m pip install -r requirements.txt -r build-requirements.txt
 pyinstaller --clean Chess.spec
 ```
-
-Build separately for each operating system.
 
 Windows:
 
@@ -144,6 +143,7 @@ chmod +x Chess
 
 Standalone clients include Python, Pygame, images, and sounds. Players do not
 need to install Python or clone the repository.
+
 ## Current limitations
 - Rooms and games are in memory and disappear when the server restarts.
 - There is no authentication, matchmaking, persistence, or reconnection.
